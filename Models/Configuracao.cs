@@ -16,6 +16,6 @@ namespace OlhuzApiWeb.Model
 
             // Relacionamento: ID do usuário dono dessa configuração
             public int UsuarioId { get; set; }
-        }
+    }
     }
 
