@@ -13,6 +13,6 @@ namespace projetoIntegradorOlhuz.API.Data
          
         }
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Configuracao> Configuracao { get; set; }
+        public DbSet <Configuracao> Configuracoes { get; set; }
     }
 }
