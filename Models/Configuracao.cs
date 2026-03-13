@@ -1,0 +1,20 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace OlhuzApiWeb.Model
+    {
+        public class Configuracao
+        {
+            [Key]
+            public int Id { get; set; }
+            public bool LeituraAtiva { get; set; }
+            public double VelocidadeLeitura { get; set; }
+            public string VozSintetica { get; set; } = "Feminina"; // Masculina ou Feminina
+            public int Volume { get; set; }
+            public bool VibracaoAtiva { get; set; }
+            public string ModoExibicao { get; set; } = "Escuro"; // Claro ou Escuro
+
+            // Relacionamento: ID do usuário dono dessa configuração
+            public int UsuarioId { get; set; }
+        }
+    }
+
