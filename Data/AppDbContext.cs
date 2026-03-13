@@ -1,7 +1,8 @@
-﻿using System.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OlhuzApiWeb.Model;
 using projetoIntegradorOlhuz.API.Models;
+using System.Data;
 
 namespace projetoIntegradorOlhuz.API.Data
 {
@@ -12,5 +13,6 @@ namespace projetoIntegradorOlhuz.API.Data
          
         }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Configuracao> Configuracao { get; set; }
     }
 }
