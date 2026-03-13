@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
 using projetoIntegradorOlhuz.API.Models.DTO;
-
+using System.Security.Cryptography;
 
 namespace projetoIntegradorOlhuz.API.Controllers
 {
@@ -14,8 +14,15 @@ namespace projetoIntegradorOlhuz.API.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : Controller
     {
+        private readonly AppDbContext _usuarioDbContext;
+
+        public UsuarioController(AppDbContext context)
+        {
+            _usuarioDbContext = context;
+        }
+
         [HttpPost("CriarUsuario")]
-        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuario usuario)
+        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDTO usuario)
         {
             if (!ModelState.IsValid)
             {
@@ -28,14 +35,15 @@ namespace projetoIntegradorOlhuz.API.Controllers
                 return BadRequest($"Já existe um usuario cadastrado com o CPF {dadosUsuario.CPF}");
             }
 
-            Usuario usuario = new usuario
+            Usuario usuario = new Usuario
             {
                 Nome = dadosUsuario.Nome,
                 CPF = dadosUsuario.CPF,
                 DataNascimento = dadosUsuario.DataNascimento,
                 Telefone = dadosUsuario.Telefone,
                 Email = dadosUsuario.Email,
-                Senha = dadosUsuario.Senha
+                Senha = dadosUsuario.Senha,
+                Hash = dadosUsuario.Hash,
             };
 
             _usuarioDbContext.Usuario.Add(usuario);
