@@ -22,15 +22,15 @@ namespace projetoIntegradorOlhuz.API.Controllers
         }
 
         [HttpPost("CriarUsuario")]
-        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDTO usuario)
+        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDTO dadosUsuario)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            Usuario? usuarioEncontrado = await _usuarioDbContext,Usuario.FirsOrDeFaultAsync(usuario => Usuario.CPF == dadosUsuario.CPF);
-          
-            if (UsuarioEncontrado != null)
+            Usuario? usuarioEncontrado = await _usuarioDbContext.Usuarios.FirstOrDefaultAsync(u => u.CPF == dadosUsuario.CPF);
+
+            if (usuarioEncontrado != null)
             {
                 return BadRequest($"Já existe um usuario cadastrado com o CPF {dadosUsuario.CPF}");
             }
@@ -43,10 +43,9 @@ namespace projetoIntegradorOlhuz.API.Controllers
                 Telefone = dadosUsuario.Telefone,
                 Email = dadosUsuario.Email,
                 Senha = dadosUsuario.Senha,
-                Hash = dadosUsuario.Hash,
             };
 
-            _usuarioDbContext.Usuario.Add(usuario);
+            _usuarioDbContext.Usuarios.Add(usuario);
             int resultadoGravacao = await _usuarioDbContext.SaveChangesAsync();
 
             if (resultadoGravacao > 0)
