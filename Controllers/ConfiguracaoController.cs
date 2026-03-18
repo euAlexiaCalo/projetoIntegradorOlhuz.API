@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OlhuzApiWeb.Data;
-using OlhuzApiWeb.Model;
-using OlhuzApiWeb.Model.DTO;
+using projetoIntegradorOlhuz.API.Data;
+using projetoIntegradorOlhuz.API.Models;
+using projetoIntegradorOlhuz.API.Models.DTO;
+using projetoIntegradorOlhuz.Models.DTO;
+using projetoIntegradorOlhuz.API.Enum;
 
-namespace OlhuzApiWeb.Controllers
+namespace projetoIntegradorOlhuz.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -20,14 +22,13 @@ namespace OlhuzApiWeb.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Configuracao>>> GetConfiguracoes()
         {
-            return await _context.Configuracao.ToListAsync();
+            return await _context.Configuracoes.ToListAsync();
         }
 
-  
         [HttpGet("usuario/{usuarioId}")]
         public async Task<ActionResult<Configuracao>> GetConfiguracaoPorUsuario(int usuarioId)
         {
-            var config = await _context.Configuracao
+            var config = await _context.Configuracoes
                 .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId);
 
             if (config == null) return NotFound(new { mensagem = "Configuração não encontrada para este usuário." });
@@ -35,7 +36,6 @@ namespace OlhuzApiWeb.Controllers
             return config;
         }
 
-  
         [HttpPost]
         public async Task<ActionResult<Configuracao>> PostConfiguracao(CriarConfiguracaoDTO dto)
         {
@@ -50,7 +50,7 @@ namespace OlhuzApiWeb.Controllers
                 UsuarioId = dto.UsuarioId
             };
 
-            _context.Configuracao.Add(configuracao);
+            _context.Configuracoes.Add(configuracao);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetConfiguracoes), new { id = configuracao.Id }, configuracao);
