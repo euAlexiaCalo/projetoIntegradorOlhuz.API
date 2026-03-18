@@ -53,7 +53,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
                 return Created();
             }
 
-            return BadRequest("Erro ao criar usuario");
+            return BadRequest("Erro ao cria';
         }
     }
 }
