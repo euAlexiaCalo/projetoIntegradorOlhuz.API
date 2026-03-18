@@ -5,13 +5,13 @@ using System.Data;
 
 namespace projetoIntegradorOlhuz.API.Data
 {
-    public class AppDbContext : DbContext 
+    public class AppDbContext : DbContext
     {
-        public  AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-         
+
         }
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet <Configuracao> Configuracoes { get; set; }
+        public DbSet<Configuracao> Configuracoes { get; set; }
     }
 }
