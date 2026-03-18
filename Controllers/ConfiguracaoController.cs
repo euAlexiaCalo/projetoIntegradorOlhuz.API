@@ -4,6 +4,7 @@ using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
 using projetoIntegradorOlhuz.Models.DTO;
 using projetoIntegradorOlhuz.API.Enum;
+using projetoIntegradorOlhuz.Model;
 
 namespace projetoIntegradorOlhuz.API.Controllers
 {
@@ -12,6 +13,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
     public class ConfiguracaoController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private Configuracao configuracoes;
 
         public ConfiguracaoController(AppDbContext context)
         {
@@ -49,7 +51,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
                 UsuarioId = dto.UsuarioId
             };
 
-            _context.Configuracoes.Add(configuracao);
+            _context.Configuracoes.Add(configuracoes);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetConfiguracoes), new { id = configuracao.Id }, configuracao);

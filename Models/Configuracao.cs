@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using projetoIntegradorOlhuz.API.Enum;
 
-namespace projetoIntegradorOlhuz.API.Models
+namespace projetoIntegradorOlhuz.API.Models     
 {
     public class Configuracao
     {
