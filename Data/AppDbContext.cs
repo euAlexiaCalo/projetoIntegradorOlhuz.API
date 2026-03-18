@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using projetoIntegradorOlhuz.Model;
 using projetoIntegradorOlhuz.API.Models;
 using System.Data;
 

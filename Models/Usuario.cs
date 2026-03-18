@@ -33,8 +33,6 @@ namespace projetoIntegradorOlhuz.API.Models
         [Required(ErrorMessage = "Senha é um valor obrigatorio")]
         public string Senha { get; set; } = string.Empty;
 
-        public int Hash { get; set; }
-
         public DateTime DataCadastro { get; set; }
 
         public Usuario()
