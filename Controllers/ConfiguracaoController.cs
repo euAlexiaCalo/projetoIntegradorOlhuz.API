@@ -2,9 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
-using projetoIntegradorOlhuz.Models.DTO;
+using projetoIntegradorOlhuz.API.Models.DTO;
 using projetoIntegradorOlhuz.API.Enum;
-using projetoIntegradorOlhuz.Model;
 
 namespace projetoIntegradorOlhuz.API.Controllers
 {

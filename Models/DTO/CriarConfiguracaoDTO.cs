@@ -1,6 +1,6 @@
 ﻿using projetoIntegradorOlhuz.API.Enum;
 
-namespace projetoIntegradorOlhuz.Models.DTO
+namespace projetoIntegradorOlhuz.API.Models.DTO
 {
     public class CriarConfiguracaoDTO
     {
