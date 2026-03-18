@@ -2,19 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
-using projetoIntegradorOlhuz.API.Models.DTO;
 using projetoIntegradorOlhuz.Models.DTO;
 using projetoIntegradorOlhuz.API.Enum;
 
-namespace projetoIntegradorOlhuz.Controllers
+namespace projetoIntegradorOlhuz.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ConfiguracoesController : ControllerBase
+    public class ConfiguracaoController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public ConfiguracoesController(AppDbContext context)
+        public ConfiguracaoController(AppDbContext context)
         {
             _context = context;
         }
