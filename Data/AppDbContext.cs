@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using OlhuzApiWeb.Model;
+using projetoIntegradorOlhuz.Model;
 using projetoIntegradorOlhuz.API.Models;
 using System.Data;
 

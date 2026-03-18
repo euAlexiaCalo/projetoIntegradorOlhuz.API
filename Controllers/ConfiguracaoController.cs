@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OlhuzApiWeb.Model;
 using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
 using projetoIntegradorOlhuz.API.Models.DTO;
 using projetoIntegradorOlhuz.Models.DTO;
 using projetoIntegradorOlhuz.API.Enum;
+using projetoIntegradorOlhuz.Model;
 
 namespace OlhuzApiWeb.Controllers
 {
@@ -14,6 +14,7 @@ namespace OlhuzApiWeb.Controllers
     public class ConfiguracoesController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private Configuracao configuracoes;
 
         public ConfiguracoesController(AppDbContext context)
         {
@@ -51,7 +52,7 @@ namespace OlhuzApiWeb.Controllers
                 UsuarioId = dto.UsuarioId
             };
 
-            _context.Configuracoes.Add(configuracao);
+            _context.Configuracoes.Add(configuracoes);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetConfiguracoes), new { id = configuracao.Id }, configuracao);
