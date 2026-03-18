@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OlhuzApiWeb.Model;
 using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
 using projetoIntegradorOlhuz.API.Models.DTO;
 using projetoIntegradorOlhuz.Models.DTO;
 using projetoIntegradorOlhuz.API.Enum;
 
-namespace OlhuzApiWeb.Controllers
+namespace projetoIntegradorOlhuz.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
