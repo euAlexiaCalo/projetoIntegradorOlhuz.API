@@ -22,9 +22,9 @@ namespace projetoIntegradorOlhuz.API.Controllers
             _usuarioDbContext = context;
             _tokenService = tokenService; // Inicializado via injeção de dependência
         }
-
+        [Authorize]
         [HttpPost("CriarUsuario")]
-        [AllowAnonymous] // Qualquer um pode criar conta
+        // Qualquer um pode criar conta
         public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDTO dadosUsuario)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -56,7 +56,6 @@ namespace projetoIntegradorOlhuz.API.Controllers
         }
 
         [HttpPost("Login")]
-        [AllowAnonymous] // Rota aberta para login
         public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -69,12 +68,12 @@ namespace projetoIntegradorOlhuz.API.Controllers
                 return Unauthorized("E-mail ou senha inválidos.");
             }
 
-            // 2. GERAÇÃO DO TOKEN
+           
             var token = _tokenService.GenerateToken(usuario);
 
             return Ok(new
             {
-                Token = token, // O front-end vai salvar isso no LocalStorage/Cookie
+                Token = token, 
                 Usuario = new
                 {
                     Id = usuario.Id,
@@ -85,12 +84,12 @@ namespace projetoIntegradorOlhuz.API.Controllers
             });
         }
 
-        // EXEMPLO DE ROTA PROTEGIDA
+        
         [HttpGet("Perfil")]
-        [Authorize] // 3. Só acessa quem enviar o Token válido no cabeçalho
+        [Authorize] 
         public IActionResult ObterPerfil()
         {
-            // O .NET preenche o objeto User automaticamente baseado no Token
+         
             var usuarioId = User.Identity?.Name;
             return Ok(new { mensagem = $"Bem-vindo, seu ID é {usuarioId}" });
         }

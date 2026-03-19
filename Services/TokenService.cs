@@ -15,7 +15,7 @@ namespace projetoIntegradorOlhuz.API.Services
             _configuration = configuration;
         }
 
-        public string GerarToken(Usuario usuario)
+        public string GenerateToken(Usuario usuario)
         {
             var chaveSecreta = _configuration["Jwt:Key"]!;
             var issuer = _configuration["Jwt:Issuer"]!;
