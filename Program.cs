@@ -20,6 +20,8 @@ namespace projetoIntegradorOlhuz.API
 
             // --- 2. REGISTRO DO SEU SERVI�O DE TOKEN ---
             builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<LoginService>();
+            builder.Services.AddScoped<UsuarioService>();
 
             // --- 3. CONFIGURA��O DE AUTENTICA��O JWT ---
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

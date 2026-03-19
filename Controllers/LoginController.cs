@@ -6,7 +6,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LoginController : Controller
+    public class LoginController : ControllerBase
     {
         private readonly LoginService _loginService;
 
