@@ -16,7 +16,7 @@ namespace projetoIntegradorOlhuz.API.Services
             _tokenService = tokenService;
         }
 
-        public async Task<ResultadoService<object>> Login(LoginDTO login)
+        public async Task<ResponseDTO> Login(LoginDTO login)
         {
            
             var usuario = await _context.Usuarios
@@ -25,12 +25,15 @@ namespace projetoIntegradorOlhuz.API.Services
           
             if (usuario == null || !BCrypt.Net.BCrypt.Verify(login.Senha, usuario.Senha))
             {
-                return ResultadoService<object>.Falha("E-mail ou senha inválidos.");
+                return new ResponseDTO
+                {
+                    Erro = true,
+                    Message = "E-mail ou senha inválidos."
+                };
             }
 
         
             var token = _tokenService.GenerateToken(usuario);
-
           
             var dados = new
             {
@@ -43,8 +46,12 @@ namespace projetoIntegradorOlhuz.API.Services
                 }
             };
 
-           
-            return ResultadoService<object>.Ok(dados, "Login realizado com sucesso!");
+            return new ResponseDTO
+            {
+                Erro = true,
+                Message = "Login realizado com sucesso!",
+                Usuario = usuario
+            };
         }
     }
 }
