@@ -41,6 +41,9 @@ namespace projetoIntegradorOlhuz.API
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
+            builder.Services.AddScoped<CriarContaService>();
+            builder.Services.AddScoped<LoginService>();
+            builder.Services.AddScoped<TokenService>();
 
             var app = builder.Build();
 
