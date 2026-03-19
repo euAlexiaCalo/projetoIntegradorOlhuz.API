@@ -3,6 +3,7 @@ using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
 using projetoIntegradorOlhuz.API.Models.DTO;
 using projetoIntegradorOlhuz.API.Models.Response;
+using static BCrypt.Net.BCrypt;
 
 namespace projetoIntegradorOlhuz.API.Services
 {
