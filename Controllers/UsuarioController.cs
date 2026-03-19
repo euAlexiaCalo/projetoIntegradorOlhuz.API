@@ -55,6 +55,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
             return Created("", new { mensagem = "Usuário criado com sucesso!" });
         }
 
+        [Authorize]
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
@@ -84,9 +85,9 @@ namespace projetoIntegradorOlhuz.API.Controllers
             });
         }
 
-        
+
+        [Authorize]
         [HttpGet("Perfil")]
-        [Authorize] 
         public IActionResult ObterPerfil()
         {
          
