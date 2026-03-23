@@ -8,9 +8,9 @@ namespace projetoIntegradorOlhuz.API.Controllers
     public class UsuarioController : Controller
     {
        
-        [HttpGet("Perfil")]
+        [HttpGet("Usuario")]
         [Authorize]
-        public IActionResult ObterPerfil()
+        public IActionResult mostrarDados()
         {
             
             var usuarioId = User.Identity?.Name;

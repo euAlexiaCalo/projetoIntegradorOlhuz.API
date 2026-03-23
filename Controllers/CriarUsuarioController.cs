@@ -16,7 +16,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody] CriarUsuarioDTO dadosUsuario)
+        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDTO dadosUsuario)
         {
             
             if (!ModelState.IsValid)
