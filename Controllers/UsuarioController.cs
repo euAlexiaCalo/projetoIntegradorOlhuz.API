@@ -9,6 +9,12 @@ namespace projetoIntegradorOlhuz.API.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
+<<<<<<< HEAD
+       
+        [HttpGet("Usuario")]
+        [Authorize]
+        public IActionResult mostrarDados()
+=======
         private readonly UsuarioService _usuarioService;
 
         public UsuarioController(UsuarioService usuarioService)
@@ -20,6 +26,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
         [HttpGet("Perfil")]
       
         public IActionResult ObterPerfil()
+>>>>>>> main
         {
             
             var nomeUsuario = User.Identity?.Name;
