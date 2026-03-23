@@ -14,21 +14,22 @@ namespace projetoIntegradorOlhuz.API.Services
             _context = context;
         }
 
-        public async Task<object> CriarUsuario(CriarUsuarioDTO dadosUsuario)
+        public async Task<ResponseDTO> criarConta(CriarUsuarioDTO dadosUsuario)
         {
-            
-            var usuarioExistente = await _context.Usuarios
-                .AnyAsync(u => u.CPF == dadosUsuario.CPF || u.Email == dadosUsuario.Email);
+            var usuarioExistente = await _context.Usuarios.AnyAsync(u => u.CPF == dadosUsuario.CPF || u.Email == dadosUsuario.Email);
 
             if (usuarioExistente)
             {
-                return "Usuário com este CPF ou E-mail já cadastrado.";
-            }
+                return new ResponseDTO
+                {
 
-            
+                    Erro = true,
+                    Message = "CPF ou Email já cadastrado.",
+
+                };
+            }
             string senhaHash = BCrypt.Net.BCrypt.HashPassword(dadosUsuario.Senha);
 
-            
             var usuario = new Usuario
             {
                 Nome = dadosUsuario.Nome,
@@ -39,12 +40,16 @@ namespace projetoIntegradorOlhuz.API.Services
                 Senha = senhaHash
             };
 
-            
             _context.Usuarios.Add(usuario);
+
             await _context.SaveChangesAsync();
 
+            return new ResponseDTO
+            {
+                Erro = false,
+                Message = "Usuário cadastrado com sucesso!",
 
-            return "Usuário criado com sucesso!";
+            };
         }
     }
 }

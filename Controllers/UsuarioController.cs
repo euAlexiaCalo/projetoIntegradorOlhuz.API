@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using projetoIntegradorOlhuz.API.Models.DTO;
 using projetoIntegradorOlhuz.API.Services;
 
 namespace projetoIntegradorOlhuz.API.Controllers
@@ -9,12 +8,6 @@ namespace projetoIntegradorOlhuz.API.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-<<<<<<< HEAD
-       
-        [HttpGet("Usuario")]
-        [Authorize]
-        public IActionResult mostrarDados()
-=======
         private readonly UsuarioService _usuarioService;
 
         public UsuarioController(UsuarioService usuarioService)
@@ -23,38 +16,21 @@ namespace projetoIntegradorOlhuz.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("Perfil")]
-      
-        public IActionResult ObterPerfil()
->>>>>>> main
+        [HttpGet("Usuario")]
+        public IActionResult mostrarDados()
         {
-            
+            // Puxa o nome do usuário autenticado pelo Token JWT
             var nomeUsuario = User.Identity?.Name;
 
-            return Ok(new
+            if (string.IsNullOrEmpty(nomeUsuario))
             {
-                mensagem = $"Bem-vindo(a), {nomeUsuario}"
-            });
-        }
-
-        [HttpPost("criarUsuario")]
-        public async Task<IActionResult> CriarUsarioAsync([FromBody] CriarUsuarioDTO dadosUsuario)
-        {
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-
-            var resultado = await _usuarioService.criarUsuario(dadosUsuario);
-
-
-            if (resultado.Erro)
-                return BadRequest(resultado.Message);
-
+                return Unauthorized("Usuário não identificado.");
+            }
 
             return Ok(new
             {
-                mensagem = "usuário criado com sucesso"
+                mensagem = $"Bem-vindo(a), {nomeUsuario}",
+                dataConsulta = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
             });
         }
     }

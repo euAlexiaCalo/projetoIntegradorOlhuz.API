@@ -15,25 +15,26 @@ namespace projetoIntegradorOlhuz.API.Controllers
             _criarContaService = criarContaService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDTO dadosUsuario)
+        [HttpPost("criarConta")]
+        public async Task<IActionResult> CriarContaAsync([FromBody] CriarUsuarioDTO dadosUsuario)
         {
             
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             
-            var resultado = await _criarContaService.CriarUsuario(dadosUsuario);
+            var resultado = await _criarContaService.CriarConta(dadosUsuario);
 
             
             if (!resultado.Sucesso)
                 return BadRequest(resultado.Mensagem);
 
-            
-            return Created("", new
+
+            return Ok(new
             {
-                mensagem = resultado.Mensagem
+                mensagem = "Usuário criado com sucesso"
             });
         }
+
     }
 }
