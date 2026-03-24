@@ -2,6 +2,7 @@
 using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
 using projetoIntegradorOlhuz.API.Models.DTO;
+using projetoIntegradorOlhuz.API.Models.Response;
 
 namespace projetoIntegradorOlhuz.API.Services
 {
@@ -16,35 +17,49 @@ namespace projetoIntegradorOlhuz.API.Services
             _tokenService = tokenService;
         }
 
-        public async Task<ResultadoService<object>> Login(LoginDTO login)
+        public async Task<ResponseLoginDTO> Login(LoginDTO dadosUsuario)
         {
-           
-            var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Email == login.Email);
 
-          
-            if (usuario == null || !BCrypt.Net.BCrypt.Verify(login.Senha, usuario.Senha))
+            // Busca o usuário pelo e-mail
+            var usuarioEncontrado = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == dadosUsuario.Email);
+
+
+            if (usuarioEncontrado == null)
             {
-                return ResultadoService<object>.Falha("E-mail ou senha inválidos.");
+                return new ResponseLoginDTO
+                {
+                    Erro = true,
+                    Message = "Usuário não encontrado."
+                };
             }
 
-        
-            var token = _tokenService.GenerateToken(usuario);
+            // Válidar a senha
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(dadosUsuario.Senha, usuarioEncontrado.Senha);
 
-          
-            var dados = new
+            if (!isValidPassword)
             {
-                Token = token,
-                Usuario = new
+                return new ResponseLoginDTO
                 {
-                    Id = usuario.Id,
-                    Nome = usuario.Nome,
-                    Email = usuario.Email
+                    Erro = true,
+                    Message = "Senha incorreta."
+                };
+            }
+
+            var token = _tokenService.GenerateToken(usuarioEncontrado);
+
+            return new ResponseLoginDTO
+            {
+                Erro = false, // Sucesso é falso para erro!
+                Message = "Login realizado com sucesso!",
+                Token = token, // Inclua o token no seu ResponseLogin se quiser enviá-lo de volta
+                Usuario = new Usuario
+                {
+                    Id = usuarioEncontrado.Id,
+                    Nome = usuarioEncontrado.Nome,
+                    Email = usuarioEncontrado.Email
+                    // Evite devolver o hash da senha para o front-end!
                 }
             };
-
-           
-            return ResultadoService<object>.Ok(dados, "Login realizado com sucesso!");
         }
     }
 }

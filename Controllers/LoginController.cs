@@ -6,7 +6,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LoginController : Controller
+    public class LoginController : ControllerBase
     {
         private readonly LoginService _loginService;
 
@@ -23,13 +23,13 @@ namespace projetoIntegradorOlhuz.API.Controllers
 
             var resultado = await _loginService.Login(login);
 
-            if (!resultado.Sucesso)
-                return Unauthorized(resultado.Mensagem);
+            if (resultado.Erro)
+                return Unauthorized(new { mensagem = resultado.Message });
 
             return Ok(new
             {
-                dados = resultado.Dados,
-                mensagem = resultado.Mensagem
+                usuario = resultado.Usuario,
+                mensagem = resultado.Message
             });
         }
     }

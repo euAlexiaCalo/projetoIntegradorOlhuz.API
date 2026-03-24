@@ -1,24 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using projetoIntegradorOlhuz.API.Services;
 
 namespace projetoIntegradorOlhuz.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuarioController : Controller
+    public class UsuarioController : ControllerBase
     {
-       
-        [HttpGet("Perfil")]
-        [Authorize]
-        public IActionResult ObterPerfil()
-        {
-            
-            var usuarioId = User.Identity?.Name;
+        private readonly UsuarioService _usuarioService;
 
-            return Ok(new
+        public UsuarioController(UsuarioService usuarioService)
+        {
+            _usuarioService = usuarioService;
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPerfil(int id)
+        {
+            var resultado = await _usuarioService.ObterPerfil(id);
+
+            if (resultado.Erro)
             {
-                mensagem = $"Bem-vindo, seu ID é {usuarioId}"
-            });
+                return NotFound(resultado); // Retorna 404 se não achar
+            }
+
+            return Ok(resultado); // Retorna 200 com os dados
         }
     }
 }
