@@ -32,7 +32,7 @@ namespace projetoIntegradorOlhuz.API.Services
                 isValidPassword = BCrypt.Net.BCrypt.Verify(dadosUsuario.Senha, usuarioEncontrado.Senha);
             }
 
-            // Se o usuário não existir OU a senha for inválida
+            // Se o usuário não existir ou a senha for inválida
             if (usuarioEncontrado == null || !isValidPassword)
             {
                 return new ResponseLoginDTO
