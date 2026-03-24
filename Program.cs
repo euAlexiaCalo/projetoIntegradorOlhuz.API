@@ -14,16 +14,17 @@ namespace projetoIntegradorOlhuz.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // --- 1. CONFIGURA��O DO BANCO DE DADOS ---
+            // CONFIGURACAO DO BANCO DE DADOS
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // --- 2. REGISTRO DO SEU SERVI�O DE TOKEN ---
+            // REGISTRO DO SEU SERVICO DE TOKEN
             builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<CriarContaService>();
             builder.Services.AddScoped<LoginService>();
             builder.Services.AddScoped<UsuarioService>();
 
-            // --- 3. CONFIGURA��O DE AUTENTICA��O JWT ---
+            // CONFIGURACAO DE AUTENTICACAO JW
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -49,7 +50,7 @@ namespace projetoIntegradorOlhuz.API
 
             var app = builder.Build();
 
-            // --- 4. PIPELINE DE EXECU��O (A ORDEM IMPORTA!) ---
+            // PIPELINE DE EXECUCAO (A ORDEM IMPORTA!)
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
@@ -58,7 +59,7 @@ namespace projetoIntegradorOlhuz.API
 
             app.UseHttpsRedirection();
 
-            // ESSA ORDEM � CRUCIAL: Autentica��o antes de Autoriza��o
+            // AUTENTICACAO DE AUTORIZACAO
             app.UseAuthentication();
             app.UseAuthorization();
 

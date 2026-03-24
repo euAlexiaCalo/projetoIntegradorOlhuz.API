@@ -2,6 +2,7 @@
 using projetoIntegradorOlhuz.API.Data;
 using projetoIntegradorOlhuz.API.Models;
 using projetoIntegradorOlhuz.API.Models.DTO;
+using projetoIntegradorOlhuz.API.Models.Response;
 
 namespace projetoIntegradorOlhuz.API.Services
 {
@@ -16,41 +17,47 @@ namespace projetoIntegradorOlhuz.API.Services
             _tokenService = tokenService;
         }
 
-        public async Task<ResponseDTO> Login(LoginDTO login)
+        public async Task<ResponseLoginDTO> Login(LoginDTO dadosUsuario)
         {
-           
-            var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Email == login.Email);
 
-          
-            if (usuario == null || !BCrypt.Net.BCrypt.Verify(login.Senha, usuario.Senha))
+            // Busca o usuário pelo e-mail
+            var usuarioEncontrado = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == dadosUsuario.Email);
+
+
+            if (usuarioEncontrado == null)
             {
-                return new ResponseDTO
+                return new ResponseLoginDTO
                 {
                     Erro = true,
-                    Message = "E-mail ou senha inválidos."
+                    Message = "Usuário não encontrado."
                 };
             }
 
-        
-            var token = _tokenService.GenerateToken(usuario);
-          
-            var dados = new
-            {
-                Token = token,
-                Usuario = new
-                {
-                    Id = usuario.Id,
-                    Nome = usuario.Nome,
-                    Email = usuario.Email
-                }
-            };
+            // Válidar a senha
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(dadosUsuario.Senha, usuarioEncontrado.Senha);
 
-            return new ResponseDTO
+            if (!isValidPassword)
             {
-                Erro = true,
+                return new ResponseLoginDTO
+                {
+                    Erro = true,
+                    Message = "Senha incorreta."
+                };
+            }
+
+            var token = _tokenService.GenerateToken(usuarioEncontrado);
+
+            return new ResponseLoginDTO
+            {
+                Erro = false,
                 Message = "Login realizado com sucesso!",
-                Usuario = usuario
+                Token = token,
+                Usuario = new Usuario
+                {
+                    Id = usuarioEncontrado.Id,
+                    Nome = usuarioEncontrado.Nome,
+                    Email = usuarioEncontrado.Email
+                }
             };
         }
     }
