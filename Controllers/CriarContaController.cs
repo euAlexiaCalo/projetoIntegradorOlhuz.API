@@ -6,7 +6,7 @@ namespace projetoIntegradorOlhuz.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CriarContaController : Controller
+    public class CriarContaController : ControllerBase
     {
         private readonly CriarContaService _criarContaService;
 
@@ -15,26 +15,22 @@ namespace projetoIntegradorOlhuz.API.Controllers
             _criarContaService = criarContaService;
         }
 
-        [HttpPost("criarConta")]
-        public async Task<IActionResult> CriarContaAsync([FromBody] CriarUsuarioDTO dadosUsuario)
+        [HttpPost]
+        public async Task<IActionResult> CriarConta([FromBody] CriarUsuarioDTO dadosUsuario)
         {
-            
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            
-            var resultado = await _criarContaService.CriarConta(dadosUsuario);
+            ResponseDTO resultado = await _criarContaService.CriarConta(dadosUsuario);
 
-            
-            if (!resultado.Sucesso)
-                return BadRequest(resultado.Mensagem);
-
-
-            return Ok(new
+            if (resultado.Erro)
             {
-                mensagem = "Usuário criado com sucesso"
-            });
-        }
+                // Retorna 400 Bad Request com a mensagem de erro específica
+                return BadRequest(resultado);
+            }
 
+            // Se erro for falso retorna 200 OK
+            return Ok(resultado);
+        }
     }
 }
