@@ -29,7 +29,8 @@ namespace projetoIntegradorOlhuz.API.Controllers
             return Ok(new
             {
                 usuario = resultado.Usuario,
-                mensagem = resultado.Message
+                mensagem = resultado.Message,
+                token = resultado.Token
             });
         }
     }
