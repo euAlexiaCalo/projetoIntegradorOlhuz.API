@@ -15,12 +15,12 @@ namespace projetoIntegradorOlhuz.API.Services
             _configuration = configuration;
         }
 
-        public string GerarToken(Usuario usuario)
+        public string GenerateToken(Usuario usuario)
         {
             var chaveSecreta = _configuration["Jwt:Key"]!;
             var issuer = _configuration["Jwt:Issuer"]!;
             var audience = _configuration["Jwt:Audience"]!;
-            // Note que usei "ExpireMinutes" para bater com o código que você mandou
+       
             var expiracaoMinutos = int.Parse(_configuration["Jwt:ExpireMinutes"]!);
 
             var chaveBytes = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(chaveSecreta));
