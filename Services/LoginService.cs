@@ -24,24 +24,21 @@ namespace projetoIntegradorOlhuz.API.Services
             var usuarioEncontrado = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == dadosUsuario.Email);
 
 
-            if (usuarioEncontrado == null)
+            bool isValidPassword = false;
+
+            if (usuarioEncontrado != null)
             {
-                return new ResponseLoginDTO
-                {
-                    Erro = true,
-                    Message = "Usuário não encontrado."
-                };
+                // Só tenta verificar o Hash se encontrou o e-mail
+                isValidPassword = BCrypt.Net.BCrypt.Verify(dadosUsuario.Senha, usuarioEncontrado.Senha);
             }
 
-            // Válidar a senha
-            bool isValidPassword = BCrypt.Net.BCrypt.Verify(dadosUsuario.Senha, usuarioEncontrado.Senha);
-
-            if (!isValidPassword)
+            // Se o usuário não existir ou a senha for inválida
+            if (usuarioEncontrado == null || !isValidPassword)
             {
                 return new ResponseLoginDTO
                 {
                     Erro = true,
-                    Message = "Senha incorreta."
+                    Message = "E-mail ou senha incorretos."
                 };
             }
 
