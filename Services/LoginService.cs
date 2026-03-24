@@ -49,15 +49,14 @@ namespace projetoIntegradorOlhuz.API.Services
 
             return new ResponseLoginDTO
             {
-                Erro = false, // Sucesso é falso para erro!
+                Erro = false,
                 Message = "Login realizado com sucesso!",
-                Token = token, // Inclua o token no seu ResponseLogin se quiser enviá-lo de volta
+                Token = token,
                 Usuario = new Usuario
                 {
                     Id = usuarioEncontrado.Id,
                     Nome = usuarioEncontrado.Nome,
                     Email = usuarioEncontrado.Email
-                    // Evite devolver o hash da senha para o front-end!
                 }
             };
         }
