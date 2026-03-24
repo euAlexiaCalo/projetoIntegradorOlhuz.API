@@ -15,7 +15,6 @@ namespace projetoIntegradorOlhuz.API.Controllers
             _usuarioService = usuarioService;
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPerfil(int id)
         {
