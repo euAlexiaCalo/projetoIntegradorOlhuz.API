@@ -14,21 +14,26 @@ namespace projetoIntegradorOlhuz.API.Services
             _context = context;
         }
 
-        public async Task<object> ObterUsuarioPorId(int id)
+        public async Task<ResponseDTO> ObterPerfil(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+
             if (usuario == null)
             {
-                return "Usuário não encontrado.";
+                return new ResponseDTO
+                {
+                    Erro = true,
+                    Message = "Usuário não encontrado."
+                };
             }
-            return new
+
+            usuario.Senha = string.Empty;
+
+            return new ResponseDTO
             {
-                Id = usuario.Id,
-                Nome = usuario.Nome,
-                CPF = usuario.CPF,
-                DataNascimento = usuario.DataNascimento,
-                Telefone = usuario.Telefone,
-                Email = usuario.Email
+                Erro = false,
+                Message = "Dados carregados com sucesso!",
+                Usuario = usuario
             };
         }
     }

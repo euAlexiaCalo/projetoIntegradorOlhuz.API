@@ -16,22 +16,17 @@ namespace projetoIntegradorOlhuz.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("Usuario")]
-        public IActionResult mostrarDados()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPerfil(int id)
         {
-            // Puxa o nome do usuário autenticado pelo Token JWT
-            var nomeUsuario = User.Identity?.Name;
+            var resultado = await _usuarioService.ObterPerfil(id);
 
-            if (string.IsNullOrEmpty(nomeUsuario))
+            if (resultado.Erro)
             {
-                return Unauthorized("Usuário não identificado.");
+                return NotFound(resultado); // Retorna 404 se não achar
             }
 
-            return Ok(new
-            {
-                mensagem = $"Bem-vindo(a), {nomeUsuario}",
-                dataConsulta = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
-            });
+            return Ok(resultado); // Retorna 200 com os dados
         }
     }
 }
