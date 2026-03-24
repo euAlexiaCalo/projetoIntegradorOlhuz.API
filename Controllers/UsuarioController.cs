@@ -1,59 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using Microsoft.EntityFrameworkCore;
-using projetoIntegradorOlhuz.API.Data;
-using projetoIntegradorOlhuz.API.Models;
-using projetoIntegradorOlhuz.API.Models.DTO;
-using System.Security.Cryptography;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using projetoIntegradorOlhuz.API.Services;
 
 namespace projetoIntegradorOlhuz.API.Controllers
 {
-    //para habilitar a api
     [ApiController]
-
     [Route("api/[controller]")]
-    public class UsuarioController : Controller
+    public class UsuarioController : ControllerBase
     {
-        private readonly AppDbContext _usuarioDbContext;
+        private readonly UsuarioService _usuarioService;
 
-        public UsuarioController(AppDbContext context)
+        public UsuarioController(UsuarioService usuarioService)
         {
-            _usuarioDbContext = context;
+            _usuarioService = usuarioService;
         }
 
-        [HttpPost("CriarUsuario")]
-        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDTO dadosUsuario)
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPerfil(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            Usuario? usuarioEncontrado = await _usuarioDbContext.Usuarios.FirstOrDefaultAsync(u => u.CPF == dadosUsuario.CPF);
+            var resultado = await _usuarioService.ObterPerfil(id);
 
-            if (usuarioEncontrado != null)
+            if (resultado.Erro)
             {
-                return BadRequest($"Já existe um usuario cadastrado com o CPF {dadosUsuario.CPF}");
+                return NotFound(resultado); // Retorna 404 se não achar
             }
 
-            Usuario usuario = new Usuario
-            {
-                Nome = dadosUsuario.Nome,
-                CPF = dadosUsuario.CPF,
-                DataNascimento = dadosUsuario.DataNascimento,
-                Telefone = dadosUsuario.Telefone,
-                Email = dadosUsuario.Email,
-                Senha = dadosUsuario.Senha,
-            };
-
-            _usuarioDbContext.Usuarios.Add(usuario);
-            int resultadoGravacao = await _usuarioDbContext.SaveChangesAsync();
-
-            if (resultadoGravacao > 0)
-            {
-                return Created();
-            }
-
-            return BadRequest("Erro ao criar usuario");
+            return Ok(resultado); // Retorna 200 com os dados
         }
     }
 }
