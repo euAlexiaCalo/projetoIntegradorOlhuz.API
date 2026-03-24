@@ -49,7 +49,7 @@ namespace projetoIntegradorOlhuz.API.Services
                 _context.Usuarios.Add(usuario);
                 await _context.SaveChangesAsync();
 
-                // Limpa a senha para segurança antes de retornar o objeto
+                // Limpa a senha antes de retornar o objeto
                 usuario.Senha = string.Empty;
 
                 return new ResponseDTO
