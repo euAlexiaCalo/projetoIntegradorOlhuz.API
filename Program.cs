@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using projetoIntegradorOlhuz.API.Data;
 using Scalar.AspNetCore;
 using projetoIntegradorOlhuz.API.Services;
@@ -14,17 +14,25 @@ namespace projetoIntegradorOlhuz.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // CONFIGURACAO DO BANCO DE DADOS
+            // ✅ ADICIONA ISSO — configuração do CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirFront", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // REGISTRO DO SEU SERVICO DE TOKEN
             builder.Services.AddScoped<TokenService>();
             builder.Services.AddScoped<CriarContaService>();
             builder.Services.AddScoped<LoginService>();
             builder.Services.AddScoped<UsuarioService>();
 
-            // CONFIGURACAO DE AUTENTICACAO JW
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -44,13 +52,9 @@ namespace projetoIntegradorOlhuz.API
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
-            builder.Services.AddScoped<CriarContaService>();
-            builder.Services.AddScoped<LoginService>();
-            builder.Services.AddScoped<TokenService>();
 
             var app = builder.Build();
 
-            // PIPELINE DE EXECUCAO (A ORDEM IMPORTA!)
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
@@ -59,12 +63,12 @@ namespace projetoIntegradorOlhuz.API
 
             app.UseHttpsRedirection();
 
-            // AUTENTICACAO DE AUTORIZACAO
+            // ✅ ADICIONA ISSO — tem que vir antes de Authentication
+            app.UseCors("PermitirFront");
+
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllers();
-
             app.Run();
         }
     }

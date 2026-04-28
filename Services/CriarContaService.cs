@@ -40,7 +40,7 @@ namespace projetoIntegradorOlhuz.API.Services
                     Nome = dadosUsuario.Nome,
                     CPF = dadosUsuario.CPF,
                     DataNascimento = dadosUsuario.DataNascimento,
-                    Telefone = dadosUsuario.Telefone,
+                    
                     Email = dadosUsuario.Email,
                     Senha = senhaHash
                 };
