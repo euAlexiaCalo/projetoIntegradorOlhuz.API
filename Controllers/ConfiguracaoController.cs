@@ -35,25 +35,47 @@ namespace projetoIntegradorOlhuz.API.Controllers
 
             return config;
         }
-
         [HttpPost]
         public async Task<ActionResult<Configuracao>> PostConfiguracao(CriarConfiguracaoDTO dto)
         {
-            var configuracao = new Configuracao
+            // 1. Primeiro, verificamos se esse usuário já tem alguma configuração salva
+            var configExistente = await _context.Configuracoes
+                .FirstOrDefaultAsync(c => c.UsuarioId == dto.UsuarioId);
+
+            if (configExistente != null)
             {
-                LeituraAtiva = dto.LeituraAtiva,
-                VelocidadeLeitura = dto.VelocidadeLeitura,
-                VozSintetica = dto.VozSintetica,
-                Volume = dto.Volume,
-                VibracaoAtiva = dto.VibracaoAtiva,
-                ModoExibicao = dto.ModoExibicao,
-                UsuarioId = dto.UsuarioId
-            };
+                // 2. Se JÁ EXISTE, nós apenas atualizamos os valores daquela linha
+                configExistente.LeituraAtiva = dto.LeituraAtiva;
+                configExistente.VelocidadeLeitura = dto.VelocidadeLeitura;
+                configExistente.VozSintetica = dto.VozSintetica;
+                configExistente.Volume = dto.Volume;
+                configExistente.VibracaoAtiva = dto.VibracaoAtiva;
+                configExistente.ModoExibicao = dto.ModoExibicao;
 
-            _context.Configuracoes.Add(configuracoes);
-            await _context.SaveChangesAsync();
+                _context.Configuracoes.Update(configExistente);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetConfiguracoes), new { id = configuracao.Id }, configuracao);
+                return Ok(configExistente);
+            }
+            else
+            {
+                // 3. Se NÃO EXISTE (primeira vez do usuário), criamos uma nova
+                var novaConfig = new Configuracao
+                {
+                    LeituraAtiva = dto.LeituraAtiva,
+                    VelocidadeLeitura = dto.VelocidadeLeitura,
+                    VozSintetica = dto.VozSintetica,
+                    Volume = dto.Volume,
+                    VibracaoAtiva = dto.VibracaoAtiva,
+                    ModoExibicao = dto.ModoExibicao,
+                    UsuarioId = dto.UsuarioId
+                };
+
+                _context.Configuracoes.Add(novaConfig); // Agora usando a variável certa!
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetConfiguracoes), new { id = novaConfig.Id }, novaConfig);
+            }
         }
     }
 }

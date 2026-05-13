@@ -32,6 +32,7 @@ namespace projetoIntegradorOlhuz.API
             builder.Services.AddScoped<CriarContaService>();
             builder.Services.AddScoped<LoginService>();
             builder.Services.AddScoped<UsuarioService>();
+            builder.Services.AddScoped<LeituraService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
